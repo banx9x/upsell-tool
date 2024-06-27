@@ -279,7 +279,11 @@ function App() {
                     <FormItem className="flex items-center justify-between gap-8">
                       <FormLabel>Variant ID mặc định</FormLabel>
                       <FormControl>
-                        <Input className="w-40" {...field} />
+                        <Input
+                          className="w-40"
+                          {...field}
+                          placeholder="45368980504818"
+                        />
                       </FormControl>
                     </FormItem>
                   )}
