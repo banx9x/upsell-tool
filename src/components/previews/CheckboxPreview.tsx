@@ -26,7 +26,7 @@ export default function CheckboxPreview({ form }: CheckboxPreviewProps) {
       </div>
 
       <div className="flex gap-2">
-        <Skeleton className="bg-zinc-300 w-32 h-32" />
+        <Skeleton className="bg-zinc-300 w-32 h-32 shrink-0" />
 
         <div className="flex flex-col justify-between">
           <div

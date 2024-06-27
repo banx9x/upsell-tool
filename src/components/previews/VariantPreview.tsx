@@ -25,13 +25,13 @@ export default function VariantPreview({ form }: VariantPreviewProps) {
         <div>(+ $9.9 USD)</div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <Skeleton className="bg-zinc-300 w-24 h-24" />
-        <Skeleton className="bg-zinc-300 w-24 h-24" />
-        <Skeleton className="bg-zinc-300 w-24 h-24" />
-        <Skeleton className="bg-zinc-300 w-24 h-24" />
-        <Skeleton className="bg-zinc-300 w-24 h-24" />
-        <Skeleton className="bg-zinc-300 w-24 h-24" />
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2">
+        <Skeleton className="bg-zinc-300 w-full aspect-square" />
+        <Skeleton className="bg-zinc-300 w-full aspect-square" />
+        <Skeleton className="bg-zinc-300 w-full aspect-square" />
+        <Skeleton className="bg-zinc-300 w-full aspect-square" />
+        <Skeleton className="bg-zinc-300 w-full aspect-square" />
+        <Skeleton className="bg-zinc-300 w-full aspect-square" />
       </div>
     </div>
   );
