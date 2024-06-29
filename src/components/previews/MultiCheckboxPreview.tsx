@@ -36,7 +36,9 @@ export default function MultiCheckboxPreview() {
             />
             <p>{getVariantImage(product!, variant.image_id).alt as string}</p>
 
-            <div className="font-bold text-indigo-500">${variant.price} USD</div>
+            <div className="font-semibold text-indigo-500">
+              ${variant.price} USD
+            </div>
 
             <div className="flex flex-col justify-between">
               <div className="flex gap-1">
