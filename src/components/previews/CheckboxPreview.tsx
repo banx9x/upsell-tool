@@ -1,15 +1,12 @@
-import { UseFormReturn } from "react-hook-form";
+import { useAppContext } from "@/AppContext";
+import { getVariantImage } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
-import { z } from "zod";
-import { schema } from "@/lib/schema";
-import { Skeleton } from "../ui/skeleton";
 
-type CheckboxPreviewProps = {
-  form: UseFormReturn<z.infer<typeof schema>>;
-};
+export default function CheckboxPreview() {
+  const { product, form } = useAppContext();
+  const { defaultSelect, defaultSelectId, title, description, label } =
+    form.watch();
 
-export default function CheckboxPreview({ form }: CheckboxPreviewProps) {
-  const { defaultSelect, title, description, label } = form.watch();
   return (
     <div className="flex flex-col gap-2">
       <div className="font-semibold flex gap-1">
@@ -22,11 +19,27 @@ export default function CheckboxPreview({ form }: CheckboxPreviewProps) {
         >
           {title}
         </div>
-        <div>(More Infomation)</div>
+        <div className="text-indigo-500">
+          (
+          <span
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) => {
+              form.setValue("popup.triggerText", e.currentTarget.innerText);
+            }}
+          >
+            More Infomation
+          </span>
+          )
+        </div>
       </div>
 
       <div className="flex gap-2">
-        <Skeleton className="bg-zinc-300 w-32 h-32 shrink-0" />
+        <img
+          src={getVariantImage(product!, defaultSelectId).src}
+          alt={product!.title}
+          className="w-32 h-32 shrink-0 block rounded shadow"
+        />
 
         <div className="flex flex-col justify-between">
           <div

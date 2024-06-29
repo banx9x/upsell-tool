@@ -12,16 +12,21 @@ export const schema = z
       }
     ),
     defaultSelect: z.boolean(),
-    defaultSelectId: z.optional(z.string()),
-    isAmountEqualToMainProduct: z.boolean(),
-    isQuantityAddToCartEqualToMainProduct: z.boolean(),
-    quantityAddToCart: z.coerce.number().min(1),
+    defaultSelectId: z.optional(z.coerce.string()),
+    quantityRule: z.enum([
+      "DEFAULT",
+      "ALWAY_EQUAL_TO_MAIN_PRODUCT",
+      "EQUAL_TO_MAIN_PRODUCT",
+      "CUSTOM",
+    ]),
+    quantity: z.coerce.number().min(1),
     sku: z.optional(z.array(z.array(z.string()).length(2))),
     title: z.string(),
     description: z.string(),
     label: z.string(),
     popup: z.optional(
       z.object({
+        triggerText: z.string(),
         title: z.string(),
         description: z.string(),
       })
@@ -75,3 +80,7 @@ export const schema = z
     message: "Ít nhất phải bán upsell trên product page hoặc cart page chứ",
     path: ["upsellOnCartPage"],
   });
+
+export type FormValues = z.infer<typeof schema>;
+export type LayoutType = z.infer<typeof schema>["layout"];
+export type QuantityRule = z.infer<typeof schema>["quantityRule"];

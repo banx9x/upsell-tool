@@ -1,16 +1,14 @@
-import { UseFormReturn } from "react-hook-form";
+import { useAppContext } from "@/AppContext";
 import { Checkbox } from "../ui/checkbox";
-import { z } from "zod";
-import { schema } from "@/lib/schema";
 
-type SimpleCheckboxPreviewProps = {
-  form: UseFormReturn<z.infer<typeof schema>>;
-};
+export default function SimpleCheckboxPreview() {
+  const { product, form } = useAppContext();
+  const { defaultSelect, defaultSelectId, title, description } = form.watch();
 
-export default function SimpleCheckboxPreview({
-  form,
-}: SimpleCheckboxPreviewProps) {
-  const { defaultSelect, title, description } = form.watch();
+  const variant = (product?.variants || []).find(
+    (v) => String(v.id) == defaultSelectId
+  );
+
   return (
     <div className="flex items-start gap-1">
       <Checkbox checked={defaultSelect} className="mt-1" />
@@ -26,7 +24,9 @@ export default function SimpleCheckboxPreview({
           >
             {title}
           </div>
-          <div>(+ $9.9 USD)</div>
+          {variant && (
+            <div className="text-indigo-500">(+ ${variant?.price} USD)</div>
+          )}
         </div>
         <div
           contentEditable

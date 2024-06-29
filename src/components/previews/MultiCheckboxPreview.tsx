@@ -1,17 +1,13 @@
-import { UseFormReturn } from "react-hook-form";
+import { useAppContext } from "@/AppContext";
 import { Checkbox } from "../ui/checkbox";
-import { z } from "zod";
-import { schema } from "@/lib/schema";
 import { Skeleton } from "../ui/skeleton";
+import clsx from "clsx";
+import { getVariantImage } from "@/lib/utils";
 
-type MultiCheckboxPreviewProps = {
-  form: UseFormReturn<z.infer<typeof schema>>;
-};
+export default function MultiCheckboxPreview() {
+  const { product, form } = useAppContext();
+  const { defaultSelect, defaultSelectId, title, label } = form.watch();
 
-export default function MultiCheckboxPreview({
-  form,
-}: MultiCheckboxPreviewProps) {
-  const { defaultSelect, title, description, label } = form.watch();
   return (
     <div className="flex flex-col gap-2">
       <div className="font-semibold flex gap-1">
@@ -28,46 +24,41 @@ export default function MultiCheckboxPreview({
       </div>
 
       <div className="flex gap-2">
-        <div className="flex flex-col gap-2 items-center">
-          <Skeleton className="bg-zinc-300 w-16 h-6" />
-          <Skeleton className="bg-zinc-300 w-32 h-32" />
-          <Skeleton className="bg-zinc-300 w-16 h-6" />
+        {product!.variants.map((variant) => (
+          <div key={variant.id} className="flex flex-col gap-2 items-center">
+            <div className="font-bold">{variant.title}</div>
+            <img
+              src={getVariantImage(product!, variant.image_id).src}
+              className={clsx("block w-40 h-40 rounded-lg", {
+                "border-2 border-indigo-500":
+                  defaultSelect && defaultSelectId == String(variant.id),
+              })}
+            />
+            <p>{getVariantImage(product!, variant.image_id).alt as string}</p>
 
-          <div className="flex flex-col justify-between">
-            <div className="flex gap-1">
-              <Checkbox checked={defaultSelect} className="mt-1" />
-              <div
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={(e) => {
-                  form.setValue("label", e.currentTarget.innerText);
-                }}
-              >
-                {label}
+            <div className="font-bold text-indigo-500">${variant.price} USD</div>
+
+            <div className="flex flex-col justify-between">
+              <div className="flex gap-1">
+                <Checkbox
+                  checked={
+                    defaultSelect && String(variant.id) == defaultSelectId
+                  }
+                  className="mt-1"
+                />
+                <div
+                  contentEditable
+                  suppressContentEditableWarning
+                  onBlur={(e) => {
+                    form.setValue("label", e.currentTarget.innerText);
+                  }}
+                >
+                  {label}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-2 items-center">
-          <Skeleton className="bg-zinc-300 w-16 h-6" />
-          <Skeleton className="bg-zinc-300 w-32 h-32" />
-          <Skeleton className="bg-zinc-300 w-16 h-6" />
-
-          <div className="flex flex-col justify-between">
-            <div className="flex gap-1">
-              <Checkbox checked={false} className="mt-1" />
-              <div
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={(e) => {
-                  form.setValue("label", e.currentTarget.innerText);
-                }}
-              >
-                {label}
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
