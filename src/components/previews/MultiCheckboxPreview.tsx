@@ -20,7 +20,19 @@ export default function MultiCheckboxPreview() {
         >
           {title}
         </div>
-        <div>(More Infomation)</div>
+        <div className="text-indigo-500">
+          (
+          <span
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) => {
+              form.setValue("popup.triggerText", e.currentTarget.innerText);
+            }}
+          >
+            More Infomation
+          </span>
+          )
+        </div>
       </div>
 
       <div className="flex gap-2">
