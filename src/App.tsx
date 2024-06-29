@@ -30,36 +30,49 @@ function App() {
     }
   }, [errors]);
 
-  const onSubmit = useCallback((values: FormValues) => {
-    const transformedValues = {
-      ...values,
-      sku: (values.sku || []).reduce((acc, row) => {
-        if (row[0].length > 0 && row[1].length > 0) {
-          acc[row[0]] = row[1]
-            .split("\n")
-            .map((v) => v.trim())
-            .filter(Boolean);
-        }
+  const onSubmit = useCallback(
+    (values: FormValues) => {
+      const transformedValues = {
+        ...values,
+        sku: (values.sku || []).reduce((acc, row) => {
+          if (row[0].length > 0 && row[1].length > 0) {
+            acc[row[0]] = row[1]
+              .split("\n")
+              .map((v) => v.trim())
+              .filter(Boolean);
+          }
 
-        return acc;
-      }, {} as Record<string, string[]>),
-    };
+          return acc;
+        }, {} as Record<string, string[]>),
+      };
 
-    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
-        .writeText(JSON.stringify(transformedValues))
-        .then(() => {
-          toast("Yayyyy! 🙂‍↔️", {
-            description: "Đã copy, paste vào metafields nhé, good luck!",
+      if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(JSON.stringify(transformedValues))
+          .then(() => {
+            toast("Yayyyy! 🙂‍↔️", {
+              description: "Đã copy, paste vào metafields nhé, good luck!",
+              action: {
+                label: "Go to metafields",
+                onClick: () => {
+                  window.open(
+                    `https://admin.shopify.com/store/dreamgifters/products/${product.id}/metafields`,
+                    "_blank"
+                  );
+                },
+              },
+              duration: 30000,
+            });
+          })
+          .catch((error) => {
+            toast("Úi có lỗi rồi 😭", {
+              description: `Chụp lại lỗi rồi dí cho dev nhé: ${String(error)}`,
+            });
           });
-        })
-        .catch((error) => {
-          toast("Úi có lỗi rồi 😭", {
-            description: `Chụp lại lỗi rồi dí cho dev nhé: ${String(error)}`,
-          });
-        });
-    }
-  }, []);
+      }
+    },
+    [product]
+  );
 
   if (!product) {
     return <ProductForm />;

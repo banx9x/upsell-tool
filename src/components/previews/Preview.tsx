@@ -8,7 +8,7 @@ import VariantPreview from "./VariantPreview";
 import { useMemo } from "react";
 import PopupPreview from "./PopupPreview";
 
-const PreviewWrapper = twc.div`bg-zinc-100/75 p-4 rounded-lg space-y-4`;
+const PreviewWrapper = twc.div`bg-zinc-50 p-4 rounded-lg space-y-4`;
 
 const LayoutPreviewWrapper = twc.div`p-3 bg-white border border-dashed border-zinc-200 rounded-lg min-h-16`;
 const PopupPreviewWrapper = twc.div`rounded-lg min-h-48 bg-zinc-400/50 p-3`;
@@ -41,7 +41,7 @@ export default function Preview() {
 
       <Space orientation="vertical">
         <BlockQuote>
-          <p>Có thể bấm vào (một số) text để chỉnh sửa cho phù hợp</p>
+          <p>Có thể bấm vào (một số) text để chỉnh sửa nội dung cho phù hợp</p>
         </BlockQuote>
 
         <BlockQuote>
