@@ -16,7 +16,7 @@ export const schema = z
     quantityRule: z.enum([
       "DEFAULT",
       "ALWAY_EQUAL_TO_MAIN_PRODUCT",
-      "EQUAL_TO_MAIN_PRODUCT",
+      "EQUAL_TO_MAIN_PRODUCT_BUT_CAN_CHANGE",
       "CUSTOM",
     ]),
     quantity: z.coerce.number().min(1),

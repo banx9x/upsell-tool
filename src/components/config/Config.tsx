@@ -57,7 +57,7 @@ const quantityRules: { value: QuantityRule; label: string }[] = [
       "Bằng số lượng sản phẩm chính & KHÔNG cho phép sửa chỉnh sửa trong giỏ hàng",
   },
   {
-    value: "EQUAL_TO_MAIN_PRODUCT",
+    value: "EQUAL_TO_MAIN_PRODUCT_BUT_CAN_CHANGE",
     label: "Bằng số lượng sản phẩm chính & có thể chỉnh sửa trong giỏ hàng",
   },
   {
