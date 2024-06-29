@@ -56,7 +56,9 @@ function App() {
                 label: "Go to metafields",
                 onClick: () => {
                   window.open(
-                    `https://admin.shopify.com/store/dreamgifters/products/${product.id}/metafields`,
+                    `https://admin.shopify.com/store/dreamgifters/products/${
+                      product!.id
+                    }/metafields`,
                     "_blank"
                   );
                 },
