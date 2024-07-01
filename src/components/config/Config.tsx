@@ -15,7 +15,9 @@ import { useMemo } from "react";
 import AddIcon from "../icons/PlusIcon";
 import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
-import { QuantityRule } from "@/lib/schema";
+import { QuantityRule, schema } from "@/lib/schema";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const ConfigWrapper = twc.div`border border-dashed rounded-lg p-4`;
 const CustomFormItem = twc(FormItem)`flex items-center justify-between gap-6`;
@@ -26,6 +28,7 @@ const CustomInput = twc(Input)`w-40`;
 const MappingSKUHeader = twc.div`flex flex-col gap-2`;
 const MappingSKUTitle = twc.h3`font-bold flex items-center justify-between`;
 const MappingSKUDescription = twc.p`text-zinc-600 text-sm`;
+const BlockQuote = twc.blockquote`bg-indigo-100/50 border-l-4 border-indigo-400 p-3`;
 
 const layoutOptions = [
   {
@@ -90,9 +93,39 @@ export default function Options() {
     [quantityRule]
   );
 
+  const handleLoadConfig = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    try {
+      const data = await navigator.clipboard.readText();
+      if (data) {
+        const json = JSON.parse(data);
+        const transformedJSON = {
+          ...json,
+          sku: (sku || []).map((row) => [row[0], json[row[0]] || ""]),
+        };
+        form.reset(schema.parse(transformedJSON));
+      }
+    } catch (error) {
+      console.error(error);
+      toast("Úi có lỗi rồi", {
+        description:
+          "Dữ liệu không đúng định dạng, copy dữ liệu hiện tại trong metafields của sản phẩm và thử lại nhé",
+      });
+    }
+  };
+
   return (
     <ConfigWrapper>
       <SectionTitle>Config Options</SectionTitle>
+
+      <BlockQuote className="mb-4">
+        <p>
+          Nếu sản phẩm đã được config metafields trước đó, hãy copy metafields
+          và bấm nút <b>Load Config from Clipboard</b> để chỉnh sửa nhanh hơn
+          nhé
+        </p>
+      </BlockQuote>
 
       <Space orientation="vertical" size="lg">
         <Space orientation="vertical" size="lg">
@@ -186,7 +219,7 @@ export default function Options() {
                       </CustomSelectTrigger>
                       <SelectContent>
                         {(product?.variants || []).map((variant) => (
-                          <SelectItem value={String(variant.id)}>
+                          <SelectItem key={variant.id} value={String(variant.id)}>
                             <div>{variant.title}</div>
                           </SelectItem>
                         ))}
@@ -310,6 +343,9 @@ export default function Options() {
         <Space className="flex justify-end">
           <Button variant="ghost" onClick={reset}>
             Reset
+          </Button>
+          <Button variant="destructive" onClick={handleLoadConfig}>
+            Load Config from Clipboard
           </Button>
           <Button disabled={!product} type="submit">
             Copy Config

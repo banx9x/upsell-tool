@@ -8,6 +8,7 @@ import Preview from "./components/previews/Preview";
 import { Container, Logo } from "./components/ui/common";
 import { Form } from "./components/ui/form";
 import { FormValues } from "./lib/schema";
+import { serializeOutput } from "./lib/utils";
 
 const FormWrapper = twc.form`grid grid-cols-2 gap-2 rounded-lg p-2 shadow-lg shadow-gray-200/75`;
 
@@ -48,7 +49,9 @@ function App() {
 
       if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard
-          .writeText(JSON.stringify(transformedValues))
+          .writeText(
+            JSON.stringify(serializeOutput(transformedValues), null, 2)
+          )
           .then(() => {
             toast("Yayyyy! 🙂‍↔️", {
               description: "Đã copy, paste vào metafields nhé, good luck!",

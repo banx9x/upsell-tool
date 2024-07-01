@@ -84,3 +84,6 @@ export const schema = z
 export type FormValues = z.infer<typeof schema>;
 export type LayoutType = z.infer<typeof schema>["layout"];
 export type QuantityRule = z.infer<typeof schema>["quantityRule"];
+export type OutputData = Omit<FormValues, "sku"> & {
+  sku: Record<string, string[]>;
+};
