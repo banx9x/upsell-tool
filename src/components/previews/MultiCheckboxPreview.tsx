@@ -29,7 +29,7 @@ export default function MultiCheckboxPreview() {
               form.setValue("popup.triggerText", e.currentTarget.innerText);
             }}
           >
-            More Infomation
+            More Information
           </span>
           )
         </div>

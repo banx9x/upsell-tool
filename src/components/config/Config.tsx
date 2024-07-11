@@ -17,7 +17,7 @@ import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
 import { QuantityRule, schema } from "@/lib/schema";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 
 const ConfigWrapper = twc.div`border border-dashed rounded-lg p-4`;
 const CustomFormItem = twc(FormItem)`flex items-center justify-between gap-6`;
@@ -79,18 +79,18 @@ export default function Options() {
       isMultiVariant &&
       defaultSelect &&
       (layout == "multi-checkbox" || layout == "variant"),
-    [isMultiVariant, defaultSelect, layout]
+    [isMultiVariant, defaultSelect, layout],
   );
 
   const requireMappingSKU = useMemo(
     () =>
       isMultiVariant && (layout == "simple-checkbox" || layout == "checkbox"),
-    [isMultiVariant, layout]
+    [isMultiVariant, layout],
   );
 
   const requireQuantity = useMemo(
     () => quantityRule == "CUSTOM",
-    [quantityRule]
+    [quantityRule],
   );
 
   const handleLoadConfig = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -107,7 +107,7 @@ export default function Options() {
         form.reset(schema.parse(transformedJSON));
       }
     } catch (error) {
-      console.error(error);
+      console.error(error, (error as ZodError).message);
       toast("Úi có lỗi rồi", {
         description:
           "Dữ liệu không đúng định dạng, copy dữ liệu hiện tại trong metafields của sản phẩm và thử lại nhé",
@@ -219,7 +219,10 @@ export default function Options() {
                       </CustomSelectTrigger>
                       <SelectContent>
                         {(product?.variants || []).map((variant) => (
-                          <SelectItem key={variant.id} value={String(variant.id)}>
+                          <SelectItem
+                            key={variant.id}
+                            value={String(variant.id)}
+                          >
                             <div>{variant.title}</div>
                           </SelectItem>
                         ))}

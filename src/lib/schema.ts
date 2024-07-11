@@ -9,7 +9,7 @@ export const schema = z
       ["simple-checkbox", "checkbox", "multi-checkbox", "variant"],
       {
         required_error: "Chưa chọn layout giời ơii",
-      }
+      },
     ),
     defaultSelect: z.boolean(),
     defaultSelectId: z.optional(z.coerce.string()),
@@ -19,7 +19,7 @@ export const schema = z
       "EQUAL_TO_MAIN_PRODUCT_BUT_CAN_CHANGE_IN_CART",
       "CUSTOM",
     ]),
-    quantity: z.coerce.number().min(1),
+    quantity: z.optional(z.coerce.number().min(1)),
     sku: z.optional(z.array(z.array(z.string()).length(2))),
     title: z.string(),
     description: z.string(),
@@ -29,9 +29,25 @@ export const schema = z
         triggerText: z.string(),
         title: z.string(),
         description: z.string(),
-      })
+      }),
     ),
   })
+  .refine(
+    (data) => {
+      if (data.quantityRule !== "CUSTOM") {
+        return true;
+      }
+
+      if (data.quantityRule == "CUSTOM" && data.quantity) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    {
+      message: "Chỉ định số lượng cụ thể khi add vào giỏ hàng",
+    },
+  )
   .refine(
     (data) => {
       if (
@@ -48,7 +64,7 @@ export const schema = z
     {
       message: "Variant ID mặc định không được để trống",
       path: ["defaultSelectId"],
-    }
+    },
   )
   .refine(
     (data) => {
@@ -59,7 +75,7 @@ export const schema = z
         return (
           data.sku &&
           data.sku.every(
-            (row) => row.length == 2 && row[0].length > 0 && row[1].length > 0
+            (row) => row.length == 2 && row[0].length > 0 && row[1].length > 0,
           )
         );
       } else {
@@ -69,7 +85,7 @@ export const schema = z
     {
       message: "Mapping SKU không được để trống",
       path: ["sku"],
-    }
+    },
   )
   .refine((data) => data.upsellOnProductPage || data.upsellOnCartPage, {
     message:

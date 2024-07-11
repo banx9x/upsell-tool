@@ -89,7 +89,7 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
         "Mô tả gì đó thật là gợi đòn để khách thấy hứng thú và mua sản phẩm",
       label: "I want this",
       popup: {
-        triggerText: "More Infomation",
+        triggerText: "More Information",
         title: "Mua mua mua đi",
         description:
           "Mô tả gì đó thật là gợi đòn để khách thấy hứng thú và mua sản phẩm",

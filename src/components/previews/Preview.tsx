@@ -47,7 +47,7 @@ export default function Preview() {
         <BlockQuote>
           <p>
             Để hiển thị giá trong nội dung mô tả, hãy đặt text{" "}
-            <code>[price]</code> và <code>[compare-price]</code> trong mô tả nhé
+            <code>[price]</code> và <code>[compare_price]</code> trong mô tả nhé
           </p>
         </BlockQuote>
       </Space>
@@ -63,7 +63,7 @@ export default function Preview() {
 
         {hasPopupPreview && (
           <Space orientation="vertical">
-            <h3>Giao diện popup (more infomation) sẽ như thế này nè</h3>
+            <h3>Giao diện popup (more information) sẽ như thế này nè</h3>
 
             <PopupPreviewWrapper>
               <PopupPreview />
