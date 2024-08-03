@@ -1,5 +1,34 @@
 import { z } from "zod";
 
+export const importSchema = z.object({
+  isMultiVariant: z.boolean({}),
+  upsellOnProductPage: z.boolean(),
+  upsellOnCartPage: z.boolean(),
+  layout: z.enum(["simple-checkbox", "checkbox", "multi-checkbox", "variant"], {
+    required_error: "Chưa chọn layout giời ơii",
+  }),
+  defaultSelect: z.boolean(),
+  defaultSelectId: z.optional(z.coerce.string()),
+  quantityRule: z.enum([
+    "DEFAULT",
+    "ALWAY_EQUAL_TO_MAIN_PRODUCT",
+    "EQUAL_TO_MAIN_PRODUCT_BUT_CAN_CHANGE_IN_CART",
+    "CUSTOM",
+  ]),
+  quantity: z.optional(z.coerce.number().min(1)),
+  sku: z.optional(z.record(z.string(), z.array(z.string()))),
+  title: z.string(),
+  description: z.string(),
+  label: z.string(),
+  popup: z.optional(
+    z.object({
+      triggerText: z.string(),
+      title: z.string(),
+      description: z.string(),
+    })
+  ),
+});
+
 export const schema = z
   .object({
     isMultiVariant: z.boolean({}),
@@ -9,7 +38,7 @@ export const schema = z
       ["simple-checkbox", "checkbox", "multi-checkbox", "variant"],
       {
         required_error: "Chưa chọn layout giời ơii",
-      },
+      }
     ),
     defaultSelect: z.boolean(),
     defaultSelectId: z.optional(z.coerce.string()),
@@ -29,7 +58,7 @@ export const schema = z
         triggerText: z.string(),
         title: z.string(),
         description: z.string(),
-      }),
+      })
     ),
   })
   .refine(
@@ -46,7 +75,7 @@ export const schema = z
     },
     {
       message: "Chỉ định số lượng cụ thể khi add vào giỏ hàng",
-    },
+    }
   )
   .refine(
     (data) => {
@@ -64,7 +93,7 @@ export const schema = z
     {
       message: "Variant ID mặc định không được để trống",
       path: ["defaultSelectId"],
-    },
+    }
   )
   .refine(
     (data) => {
@@ -75,7 +104,7 @@ export const schema = z
         return (
           data.sku &&
           data.sku.every(
-            (row) => row.length == 2 && row[0].length > 0 && row[1].length > 0,
+            (row) => row.length == 2 && row[0].length > 0 && row[1].length > 0
           )
         );
       } else {
@@ -85,7 +114,7 @@ export const schema = z
     {
       message: "Mapping SKU không được để trống",
       path: ["sku"],
-    },
+    }
   )
   .refine((data) => data.upsellOnProductPage || data.upsellOnCartPage, {
     message:

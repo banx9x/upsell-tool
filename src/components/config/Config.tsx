@@ -1,5 +1,9 @@
 import { useAppContext } from "@/AppContext";
+import { importSchema, QuantityRule } from "@/lib/schema";
+import { useMemo } from "react";
 import { twc } from "react-twc";
+import { toast } from "sonner";
+import { ZodError } from "zod";
 import { Button } from "../ui/button";
 import { SectionTitle, Space } from "../ui/common";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
@@ -11,13 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useMemo } from "react";
-import AddIcon from "../icons/PlusIcon";
-import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
-import { QuantityRule, schema } from "@/lib/schema";
-import { toast } from "sonner";
-import { z, ZodError } from "zod";
+import { Textarea } from "../ui/textarea";
 
 const ConfigWrapper = twc.div`border border-dashed rounded-lg p-4`;
 const CustomFormItem = twc(FormItem)`flex items-center justify-between gap-6`;
@@ -79,18 +78,18 @@ export default function Options() {
       isMultiVariant &&
       defaultSelect &&
       (layout == "multi-checkbox" || layout == "variant"),
-    [isMultiVariant, defaultSelect, layout],
+    [isMultiVariant, defaultSelect, layout]
   );
 
   const requireMappingSKU = useMemo(
     () =>
       isMultiVariant && (layout == "simple-checkbox" || layout == "checkbox"),
-    [isMultiVariant, layout],
+    [isMultiVariant, layout]
   );
 
   const requireQuantity = useMemo(
     () => quantityRule == "CUSTOM",
-    [quantityRule],
+    [quantityRule]
   );
 
   const handleLoadConfig = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -99,12 +98,25 @@ export default function Options() {
     try {
       const data = await navigator.clipboard.readText();
       if (data) {
-        const json = JSON.parse(data);
+        const json = importSchema.parse(JSON.parse(data));
+        console.log(json);
+
+        console.log(
+          Object.entries(json.sku || {}).map((row) => [
+            row[0],
+            row[1].join("\n"),
+          ])
+        );
+
         const transformedJSON = {
           ...json,
-          sku: (sku || []).map((row) => [row[0], json[row[0]] || ""]),
+          sku: Object.entries(json.sku || {}).map((row) => [
+            row[0],
+            row[1].join("\n"),
+          ]),
         };
-        form.reset(schema.parse(transformedJSON));
+        console.log(transformedJSON);
+        form.reset(transformedJSON);
       }
     } catch (error) {
       console.error(error, (error as ZodError).message);

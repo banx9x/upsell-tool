@@ -54,7 +54,7 @@ function App() {
           )
           .then(() => {
             toast("Yayyyy! 🙂‍↔️", {
-              description: "Đã copy, paste vào metafields nhé, good luck!",
+              description: "Đã copy, tiếp theo hãy paste vào metafields nhé, good luck!",
               action: {
                 label: "Go to metafields",
                 onClick: () => {
