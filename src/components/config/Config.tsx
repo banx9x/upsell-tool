@@ -115,6 +115,7 @@ export default function Options() {
         );
 
         const transformedJSON = {
+          id: product?.id,
           ...json,
           sku: Object.entries(json.sku || {}).map((row) => [
             row[0],
