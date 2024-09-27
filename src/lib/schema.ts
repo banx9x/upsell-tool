@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const importSchema = z.object({
+  id: z.number(),
   isMultiVariant: z.boolean({}),
   upsellOnProductPage: z.boolean(),
   upsellOnCartPage: z.boolean(),
@@ -32,6 +33,7 @@ export const importSchema = z.object({
 
 export const schema = z
   .object({
+    id: z.number(),
     isMultiVariant: z.boolean({}),
     upsellOnProductPage: z.boolean(),
     upsellOnCartPage: z.boolean(),

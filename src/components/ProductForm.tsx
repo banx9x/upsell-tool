@@ -27,7 +27,7 @@ export default function ProductForm() {
         .then((res) => res.json() as Promise<GetProductResponse>)
         .then(({ product }) => {
           setProduct(product);
-
+          form.setValue("id", product.id);
           form.setValue("isMultiVariant", product.variants.length > 1);
           form.setValue(
             "sku",
