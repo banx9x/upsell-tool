@@ -45,6 +45,7 @@ export function serializeOutput(data: OutputData) {
 
   if (data.quantityRule !== "CUSTOM") {
     delete clone.quantity;
+    delete clone.showQuantity;
   }
 
   return clone;

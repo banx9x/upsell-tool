@@ -1,22 +1,22 @@
-import { useAppContext } from "@/AppContext";
-import { importSchema, QuantityRule } from "@/lib/schema";
-import { useMemo } from "react";
-import { twc } from "react-twc";
-import { toast } from "sonner";
-import { ZodError } from "zod";
-import { Button } from "../ui/button";
-import { SectionTitle, Space } from "../ui/common";
-import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { Input } from "../ui/input";
+import { useAppContext } from '@/AppContext';
+import { importSchema, QuantityRule } from '@/lib/schema';
+import { useMemo } from 'react';
+import { twc } from 'react-twc';
+import { toast } from 'sonner';
+import { ZodError } from 'zod';
+import { Button } from '../ui/button';
+import { SectionTitle, Space } from '../ui/common';
+import { FormControl, FormField, FormItem, FormLabel } from '../ui/form';
+import { Input } from '../ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Switch } from "../ui/switch";
-import { Textarea } from "../ui/textarea";
+} from '../ui/select';
+import { Switch } from '../ui/switch';
+import { Textarea } from '../ui/textarea';
 
 const ConfigWrapper = twc.div`border border-dashed rounded-lg p-4`;
 const CustomFormItem = twc(FormItem)`flex items-center justify-between gap-6`;
@@ -31,64 +31,70 @@ const BlockQuote = twc.blockquote`bg-indigo-100/50 border-l-4 border-indigo-400 
 
 const layoutOptions = [
   {
-    value: "simple-checkbox",
-    label: "Simple Checkbox",
+    value: 'simple-checkbox',
+    label: 'Simple Checkbox',
   },
   {
-    value: "checkbox",
-    label: "Checkbox",
+    value: 'checkbox',
+    label: 'Checkbox',
   },
   {
-    value: "multi-checkbox",
-    label: "Multi Checkbox",
+    value: 'multi-checkbox',
+    label: 'Multi Checkbox',
   },
   {
-    value: "variant",
-    label: "Variant",
+    value: 'variant',
+    label: 'Variant',
   },
 ];
 
 const quantityRules: { value: QuantityRule; label: string }[] = [
   {
-    value: "DEFAULT",
-    label: "1 & Có thể chỉnh sửa số lượng trong giỏ hàng",
+    value: 'DEFAULT',
+    label: '1 & Có thể chỉnh sửa số lượng trong giỏ hàng',
   },
   {
-    value: "ALWAY_EQUAL_TO_MAIN_PRODUCT",
+    value: 'ALWAY_EQUAL_TO_MAIN_PRODUCT',
     label:
-      "Bằng số lượng sản phẩm chính & KHÔNG cho phép sửa chỉnh sửa trong giỏ hàng",
+      'Bằng số lượng sản phẩm chính & KHÔNG cho phép sửa chỉnh sửa trong giỏ hàng',
   },
   {
-    value: "EQUAL_TO_MAIN_PRODUCT_BUT_CAN_CHANGE_IN_CART",
-    label: "Bằng số lượng sản phẩm chính & có thể chỉnh sửa trong giỏ hàng",
+    value: 'EQUAL_TO_MAIN_PRODUCT_BUT_CAN_CHANGE_IN_CART',
+    label: 'Bằng số lượng sản phẩm chính & có thể chỉnh sửa trong giỏ hàng',
   },
   {
-    value: "CUSTOM",
-    label: "Số lượng tùy chỉnh & có thể chỉnh sửa trong giỏ hàng",
+    value: 'CUSTOM',
+    label: 'Số lượng tùy chỉnh & có thể chỉnh sửa trong giỏ hàng',
   },
 ];
 
 export default function Options() {
   const { product, form, reset } = useAppContext();
-  const { isMultiVariant, defaultSelect, layout, sku, quantityRule } =
-    form.watch();
+  const {
+    isMultiVariant,
+    defaultSelect,
+    layout,
+    sku,
+    quantityRule,
+    showQuantity,
+  } = form.watch();
 
   const requireDefaultSelectId = useMemo(
     () =>
       isMultiVariant &&
       defaultSelect &&
-      (layout == "multi-checkbox" || layout == "variant"),
+      (layout == 'multi-checkbox' || layout == 'variant'),
     [isMultiVariant, defaultSelect, layout]
   );
 
   const requireMappingSKU = useMemo(
     () =>
-      isMultiVariant && (layout == "simple-checkbox" || layout == "checkbox"),
+      isMultiVariant && (layout == 'simple-checkbox' || layout == 'checkbox'),
     [isMultiVariant, layout]
   );
 
   const requireQuantity = useMemo(
-    () => quantityRule == "CUSTOM",
+    () => quantityRule == 'CUSTOM',
     [quantityRule]
   );
 
@@ -104,7 +110,7 @@ export default function Options() {
         console.log(
           Object.entries(json.sku || {}).map((row) => [
             row[0],
-            row[1].join("\n"),
+            row[1].join('\n'),
           ])
         );
 
@@ -112,7 +118,7 @@ export default function Options() {
           ...json,
           sku: Object.entries(json.sku || {}).map((row) => [
             row[0],
-            row[1].join("\n"),
+            row[1].join('\n'),
           ]),
         };
         console.log(transformedJSON);
@@ -120,9 +126,9 @@ export default function Options() {
       }
     } catch (error) {
       console.error(error, (error as ZodError).message);
-      toast("Úi có lỗi rồi", {
+      toast('Úi có lỗi rồi', {
         description:
-          "Dữ liệu không đúng định dạng, copy dữ liệu hiện tại trong metafields của sản phẩm và thử lại nhé",
+          'Dữ liệu không đúng định dạng, copy dữ liệu hiện tại trong metafields của sản phẩm và thử lại nhé',
       });
     }
   };
@@ -131,7 +137,7 @@ export default function Options() {
     <ConfigWrapper>
       <SectionTitle>Config Options</SectionTitle>
 
-      <BlockQuote className="mb-4">
+      <BlockQuote className='mb-4'>
         <p>
           Nếu sản phẩm đã được config metafields trước đó, hãy copy metafields
           và bấm nút <b>Load Config from Clipboard</b> để chỉnh sửa nhanh hơn
@@ -139,10 +145,10 @@ export default function Options() {
         </p>
       </BlockQuote>
 
-      <Space orientation="vertical" size="lg">
-        <Space orientation="vertical" size="lg">
+      <Space orientation='vertical' size='lg'>
+        <Space orientation='vertical' size='lg'>
           <FormField
-            name="layout"
+            name='layout'
             control={form.control}
             render={({ field }) => (
               <CustomFormItem>
@@ -150,7 +156,7 @@ export default function Options() {
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <CustomSelectTrigger>
-                      <SelectValue placeholder="Chọn giao diện" />
+                      <SelectValue placeholder='Chọn giao diện' />
                     </CustomSelectTrigger>
                     <SelectContent>
                       {layoutOptions.map((layout) => (
@@ -162,11 +168,10 @@ export default function Options() {
                   </Select>
                 </FormControl>
               </CustomFormItem>
-            )}
-          ></FormField>
+            )}></FormField>
 
           <FormField
-            name="upsellOnProductPage"
+            name='upsellOnProductPage'
             control={form.control}
             render={({ field }) => (
               <CustomFormItem>
@@ -180,11 +185,10 @@ export default function Options() {
                   />
                 </FormControl>
               </CustomFormItem>
-            )}
-          ></FormField>
+            )}></FormField>
 
           <FormField
-            name="upsellOnCartPage"
+            name='upsellOnCartPage'
             control={form.control}
             render={({ field }) => (
               <CustomFormItem>
@@ -198,11 +202,10 @@ export default function Options() {
                   />
                 </FormControl>
               </CustomFormItem>
-            )}
-          ></FormField>
+            )}></FormField>
 
           <FormField
-            name="defaultSelect"
+            name='defaultSelect'
             control={form.control}
             render={({ field }) => (
               <CustomFormItem>
@@ -214,27 +217,25 @@ export default function Options() {
                   />
                 </FormControl>
               </CustomFormItem>
-            )}
-          ></FormField>
+            )}></FormField>
 
           {requireDefaultSelectId && (
             <FormField
-              name="defaultSelectId"
+              name='defaultSelectId'
               control={form.control}
               render={({ field }) => (
                 <CustomFormItem>
                   <CustomFormLabel>Variant mặc định được chọn</CustomFormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <CustomSelectTrigger className="w-60">
-                        <SelectValue placeholder="Chọn variant mặc định" />
+                      <CustomSelectTrigger className='w-60'>
+                        <SelectValue placeholder='Chọn variant mặc định' />
                       </CustomSelectTrigger>
                       <SelectContent>
                         {(product?.variants || []).map((variant) => (
                           <SelectItem
                             key={variant.id}
-                            value={String(variant.id)}
-                          >
+                            value={String(variant.id)}>
                             <div>{variant.title}</div>
                           </SelectItem>
                         ))}
@@ -242,12 +243,11 @@ export default function Options() {
                     </Select>
                   </FormControl>
                 </CustomFormItem>
-              )}
-            ></FormField>
+              )}></FormField>
           )}
 
           <FormField
-            name="quantityRule"
+            name='quantityRule'
             control={form.control}
             render={({ field }) => (
               <CustomFormItem>
@@ -257,14 +257,13 @@ export default function Options() {
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <CustomSelectTrigger>
-                      <SelectValue placeholder="Chọn số lượng" />
+                      <SelectValue placeholder='Chọn số lượng' />
                     </CustomSelectTrigger>
                     <SelectContent>
                       {quantityRules.map((quantityRule) => (
                         <SelectItem
                           key={quantityRule.value}
-                          value={quantityRule.value}
-                        >
+                          value={quantityRule.value}>
                           {quantityRule.label}
                         </SelectItem>
                       ))}
@@ -272,31 +271,49 @@ export default function Options() {
                   </Select>
                 </FormControl>
               </CustomFormItem>
-            )}
-          ></FormField>
+            )}></FormField>
 
           {requireQuantity && (
-            <FormField
-              name="quantity"
-              control={form.control}
-              render={({ field }) => (
-                <CustomFormItem>
-                  <CustomFormLabel>Nhập số lượng cụ thể</CustomFormLabel>
-                  <FormControl>
-                    <CustomInput type="number" {...field} min={1} step={1} />
-                  </FormControl>
-                </CustomFormItem>
-              )}
-            ></FormField>
+            <>
+              <FormField
+                name='quantity'
+                control={form.control}
+                render={({ field }) => (
+                  <CustomFormItem>
+                    <CustomFormLabel>Nhập số lượng cụ thể</CustomFormLabel>
+                    <FormControl>
+                      <CustomInput type='number' {...field} min={1} step={1} />
+                    </FormControl>
+                  </CustomFormItem>
+                )}></FormField>
+              <FormField
+                name='showQuantity'
+                control={form.control}
+                render={() => (
+                  <CustomFormItem>
+                    <CustomFormLabel>
+                      Có hiển thị số lượng không?
+                    </CustomFormLabel>
+                    <FormControl>
+                      <CustomSwitch
+                        checked={showQuantity}
+                        onCheckedChange={() =>
+                          form.setValue('showQuantity', !showQuantity)
+                        }
+                      />
+                    </FormControl>
+                  </CustomFormItem>
+                )}></FormField>
+            </>
           )}
 
           {requireMappingSKU && (
-            <Space orientation="vertical" size="lg">
+            <Space orientation='vertical' size='lg'>
               <MappingSKUHeader>
                 <MappingSKUTitle>Mapping SKU</MappingSKUTitle>
 
                 <MappingSKUDescription>
-                  Mapping SKU là bắt buộc với giao diện dạng{" "}
+                  Mapping SKU là bắt buộc với giao diện dạng{' '}
                   <b>Simple Checkbox</b> hoặc <b>Checkbox</b> khi sản phẩm
                   upsell có nhiều variants
                 </MappingSKUDescription>
@@ -308,14 +325,14 @@ export default function Options() {
               </MappingSKUHeader>
 
               <FormField
-                name="sku"
+                name='sku'
                 control={form.control}
                 render={({ field }) => (
-                  <div className="flex flex-col gap-2">
+                  <div className='flex flex-col gap-2'>
                     {(field.value || []).map((item, index) => (
-                      <div key={index} className="flex gap-2">
+                      <div key={index} className='flex gap-2'>
                         <Input
-                          className="w-60"
+                          className='w-60'
                           disabled
                           value={item[0]}
                           onChange={(e) => {
@@ -326,12 +343,12 @@ export default function Options() {
                                 return row;
                               }
                             });
-                            form.setValue("sku", newSKU);
+                            form.setValue('sku', newSKU);
                           }}
-                          placeholder="SKU sản phẩm Upsell"
+                          placeholder='SKU sản phẩm Upsell'
                         />
                         <Textarea
-                          className="flex-1"
+                          className='flex-1'
                           value={item[1]}
                           onChange={(e) => {
                             const newSKU = (sku || []).map((row, i) => {
@@ -341,28 +358,27 @@ export default function Options() {
                                 return row;
                               }
                             });
-                            form.setValue("sku", newSKU);
+                            form.setValue('sku', newSKU);
                           }}
-                          placeholder="List SKU sản phẩm chính, phân tách bằng cách xuống dòng"
+                          placeholder='List SKU sản phẩm chính, phân tách bằng cách xuống dòng'
                           rows={5}
                         />
                       </div>
                     ))}
                   </div>
-                )}
-              ></FormField>
+                )}></FormField>
             </Space>
           )}
         </Space>
 
-        <Space className="flex justify-end">
-          <Button variant="ghost" onClick={reset}>
+        <Space className='flex justify-end'>
+          <Button variant='ghost' onClick={reset}>
             Reset
           </Button>
-          <Button variant="destructive" onClick={handleLoadConfig}>
+          <Button variant='destructive' onClick={handleLoadConfig}>
             Load Config from Clipboard
           </Button>
-          <Button disabled={!product} type="submit">
+          <Button disabled={!product} type='submit'>
             Copy Config
           </Button>
         </Space>
